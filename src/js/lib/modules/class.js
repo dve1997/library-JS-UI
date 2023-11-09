@@ -1,5 +1,6 @@
 import $ from "../core";
 
+// Добавляем классы у полченных элем
 $.prototype.addClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].classList) {
@@ -12,6 +13,7 @@ $.prototype.addClass = function (...className) {
   return this;
 };
 
+// Удаляем классы у полченных элем
 $.prototype.removeClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].classList) {
@@ -24,6 +26,7 @@ $.prototype.removeClass = function (...className) {
   return this;
 };
 
+// Тоглим класс у полченных элем
 $.prototype.toggleClass = function (className) {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].classList) {

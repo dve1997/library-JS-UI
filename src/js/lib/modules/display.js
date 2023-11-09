@@ -1,5 +1,6 @@
 import $ from "../core";
 
+// Отображаем полченные элем
 $.prototype.showElem = function () {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].style) {
@@ -12,6 +13,7 @@ $.prototype.showElem = function () {
   return this;
 };
 
+// Скрываем полченные элем
 $.prototype.hideElem = function () {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].style) {
@@ -24,6 +26,7 @@ $.prototype.hideElem = function () {
   return this;
 };
 
+// Тоглим отображение полченных элем
 $.prototype.toggleElem = function () {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].style) {

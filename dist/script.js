@@ -47,8 +47,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core */ "./src/js/lib/core.js");
 /* harmony import */ var _modules_display__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/display */ "./src/js/lib/modules/display.js");
 /* harmony import */ var _modules_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/class */ "./src/js/lib/modules/class.js");
-/* harmony import */ var _modules_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/actions */ "./src/js/lib/modules/actions.js");
+/* harmony import */ var _modules_hadlers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/hadlers */ "./src/js/lib/modules/hadlers.js");
 /* harmony import */ var _modules_attribut__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/attribut */ "./src/js/lib/modules/attribut.js");
+/* harmony import */ var _modules_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/actions */ "./src/js/lib/modules/actions.js");
+
 
 
 
@@ -67,23 +69,102 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.on = function (eventType, callbackF) {
-  if (eventType && callbackF) {
-    for (let i = 0; i < this.length; i++) {
-      this[i].addEventListener(eventType, callbackF);
+
+// Записываем в полученные элем переданный контент
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.html = function (content) {
+  for (let i = 0; i < this.length; i++) {
+    if (content) {
+      this[i].innerHTML = content;
+    } else {
+      return this[i].innerHTML;
     }
-  } else {
-    return this;
+  }
+  return this;
+};
+
+// Возращаем элем по заданному индексу
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.eq = function (i) {
+  const objLength = Object.keys(this).length;
+  let elem = this[i];
+  for (let i = 0; i < objLength; i++) {
+    delete this[i];
+  }
+  this[0] = elem;
+  this.length = 1;
+  return this;
+};
+
+// Возращаем индекс полученного элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.index = function () {
+  const elem = this[0];
+  const parent = this[0].parentNode.children;
+  const parentLength = parent.length;
+  for (let i = 0; i < parentLength; i++) {
+    if (parent[i] == elem) {
+      return i;
+    } else {
+      continue;
+    }
   }
 };
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.off = function (eventType, callbackF) {
-  if (eventType && callbackF) {
-    for (let i = 0; i < this.length; i++) {
-      this[i].removeEventListener(eventType, callbackF);
+
+// Возращем объект с заданным селектором из полученных элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.find = function (selector) {
+  let lenghtNewObj = 0;
+  const elements = Object.assign({}, this);
+  if (selector) {
+    for (let i = 0; i < elements.length; i++) {
+      let arr = elements[i].querySelectorAll(selector);
+      if (arr.length == 0) {
+        continue;
+      }
+      for (let j = 0; j < arr.length; j++) {
+        this[j] = arr[j];
+        this.length = ++lenghtNewObj;
+      }
     }
-  } else {
-    return this;
   }
+  for (let k = this.length; k < elements.length; k++) {
+    delete this[k];
+  }
+  return this;
+};
+
+// Возращем объект состоящий из одного или некольких элем с заданным родительским селектором из изначально полученных элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.closest = function (selector) {
+  let elementsLenght = this.length;
+  for (let i = 0; i < this.length; i++) {
+    if (this[i].closest(selector) == null) {
+      let error = new Error("Selector is not defined");
+      console.error(error);
+      return;
+    }
+    this[i] = this[i].closest(selector);
+  }
+  for (let k = this.length; k < elementsLenght; k++) {
+    delete this[k];
+  }
+  return this;
+};
+
+// Возращаем все элем, кроме изначально переданного элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.siblings = function () {
+  let lenghtNewObj = 0;
+  const element = Object.assign({}, this);
+  for (let i = 0; i < element.length; i++) {
+    let arr = element[i].parentNode.children;
+    for (let j = 0; j < arr.length; j++) {
+      if (element[i] === arr[j]) {
+        continue;
+      }
+      this[j] = arr[j];
+      this.length = ++lenghtNewObj;
+    }
+  }
+  for (let k = this.length; k < element.length; k++) {
+    delete this[k];
+  }
+  return this;
 };
 
 /***/ }),
@@ -97,6 +178,8 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.off = function (eventTyp
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
+
+// Устанавливаем заданный атрибут полченным элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.setAtr = function (atrName, atrMeaning) {
   if (atrName && atrMeaning) {
     for (let i = 0; i < this.length; i++) {
@@ -108,10 +191,12 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.setAtr = function (atrNa
   }
   return this;
 };
+
+// Удаляем заданный атрибут у полученных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.removeAtr = function (atrName) {
   if (atrName) {
     for (let i = 0; i < this.length; i++) {
-      if (!this[i].setAttribute) {
+      if (!this[i].removeAttribute) {
         continue;
       }
       this[i].removeAttribute(atrName);
@@ -119,10 +204,12 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.removeAtr = function (at
   }
   return this;
 };
+
+// Возращаем значение заданного атрибута полученных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.getAtr = function (atrName) {
   if (atrName) {
     for (let i = 0; i < this.length; i++) {
-      if (!this[i].setAttribute) {
+      if (!this[i].getAttribute) {
         continue;
       }
       return this[i].getAttribute(atrName);
@@ -141,6 +228,8 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.getAtr = function (atrNa
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
+
+// Добавляем классы у полченных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.addClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].classList) {
@@ -150,6 +239,8 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.addClass = function (...
   }
   return this;
 };
+
+// Удаляем классы у полченных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.removeClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].classList) {
@@ -159,6 +250,8 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.removeClass = function (
   }
   return this;
 };
+
+// Тоглим класс у полченных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleClass = function (className) {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].classList) {
@@ -180,6 +273,8 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleClass = function (
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
+
+// Отображаем полченные элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.showElem = function () {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].style) {
@@ -189,6 +284,8 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.showElem = function () {
   }
   return this;
 };
+
+// Скрываем полченные элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.hideElem = function () {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].style) {
@@ -198,6 +295,8 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.hideElem = function () {
   }
   return this;
 };
+
+// Тоглим отображение полченных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleElem = function () {
   for (let i = 0; i < this.length; i++) {
     if (!this[i].style) {
@@ -211,6 +310,40 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleElem = function ()
     console.log(this);
   }
   return this;
+};
+
+/***/ }),
+
+/***/ "./src/js/lib/modules/hadlers.js":
+/*!***************************************!*\
+  !*** ./src/js/lib/modules/hadlers.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+
+// Добавляем обработчик событий на полученные элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.on = function (eventType, callbackF) {
+  if (eventType && callbackF) {
+    for (let i = 0; i < this.length; i++) {
+      this[i].addEventListener(eventType, callbackF);
+    }
+  } else {
+    return this;
+  }
+};
+
+// Удаляем обработчик событий с полученных элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.off = function (eventType, callbackF) {
+  if (eventType && callbackF) {
+    for (let i = 0; i < this.length; i++) {
+      this[i].removeEventListener(eventType, callbackF);
+    }
+  } else {
+    return this;
+  }
 };
 
 /***/ })
@@ -280,9 +413,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
 
-$(".active").setAtr("data-modal", "true");
-$(".active").removeAtr("data-modal", "true");
-console.log($(".active").getAtr("data-size"));
+console.log($(".one").eq(1).siblings());
 })();
 
 /******/ })()
