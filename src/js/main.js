@@ -1,3 +1,4 @@
 import "./lib/lib";
 
-console.log($(".one").eq(1).siblings());
+// $(".num").fadeOut(2000);
+// $(".num").fadeIn(2000);

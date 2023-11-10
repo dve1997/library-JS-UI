@@ -50,6 +50,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_hadlers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/hadlers */ "./src/js/lib/modules/hadlers.js");
 /* harmony import */ var _modules_attribut__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/attribut */ "./src/js/lib/modules/attribut.js");
 /* harmony import */ var _modules_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/actions */ "./src/js/lib/modules/actions.js");
+/* harmony import */ var _modules_effects__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/effects */ "./src/js/lib/modules/effects.js");
+
 
 
 
@@ -314,6 +316,62 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleElem = function ()
 
 /***/ }),
 
+/***/ "./src/js/lib/modules/effects.js":
+/*!***************************************!*\
+  !*** ./src/js/lib/modules/effects.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.animateOverTime = function (dur, cb) {
+  let timeStart;
+  function _animateOverTime() {
+    const time = new Date().getTime();
+    if (!timeStart) {
+      timeStart = time;
+    }
+    let timeChange = time - timeStart;
+    let meaning = Math.min(timeChange / dur, 1);
+    cb(meaning);
+    if (meaning < 1) {
+      requestAnimationFrame(_animateOverTime);
+    }
+  }
+  return _animateOverTime;
+};
+
+// Анимация удаление полченных элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeIn = function (dur, display = "block") {
+  for (let i = 0; i < this.length; i++) {
+    this[i].style.display = display;
+    const _fadeIn = meaning => {
+      this[i].style.opacity = meaning;
+    };
+    const ani = this.animateOverTime(dur, _fadeIn);
+    requestAnimationFrame(ani);
+  }
+  return this;
+};
+
+// Анимация добавления полченных элем
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOut = function (dur) {
+  for (let i = 0; i < this.length; i++) {
+    const _fadeOut = meaning => {
+      this[i].style.opacity = 1 - meaning;
+      if (meaning === 1) {
+        this[i].style.display = "none";
+      }
+    };
+    const ani = this.animateOverTime(dur, _fadeOut);
+    requestAnimationFrame(ani);
+  }
+  return this;
+};
+
+/***/ }),
+
 /***/ "./src/js/lib/modules/hadlers.js":
 /*!***************************************!*\
   !*** ./src/js/lib/modules/hadlers.js ***!
@@ -413,7 +471,9 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
 
-console.log($(".one").eq(1).siblings());
+
+// $(".num").fadeOut(2000);
+// $(".num").fadeIn(2000);
 })();
 
 /******/ })()
