@@ -1,5 +1,6 @@
 import $ from "../core";
 
+// Функция запуска анимации
 $.prototype.animateOverTime = function (dur, cb) {
   let timeStart;
 
@@ -23,35 +24,84 @@ $.prototype.animateOverTime = function (dur, cb) {
   return _animateOverTime;
 };
 
+// Функция запуска анимации на показ элем
+$.prototype.showBlocks = (dur, display, elements, ani) => {
+  function _showBlocks() {
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].style.display = display;
+
+      const _fadeIn = (meaning) => {
+        elements[i].style.opacity = meaning;
+      };
+
+      requestAnimationFrame(ani(dur, _fadeIn));
+    }
+  }
+
+  return _showBlocks;
+};
+
+// Функция запуска анимации на скрытие элем
+$.prototype.hideBlocks = (dur, elements, ani) => {
+  function _hideBlocks() {
+    for (let i = 0; i < elements.length; i++) {
+      const _fadeOut = (meaning) => {
+        elements[i].style.opacity = 1 - meaning;
+
+        if (meaning === 1) {
+          elements[i].style.display = "none";
+        }
+      };
+
+      requestAnimationFrame(ani(dur, _fadeOut));
+    }
+  }
+
+  return _hideBlocks;
+};
+
 // Анимация удаление полченных элем
 $.prototype.fadeIn = function (dur, display = "block") {
-  for (let i = 0; i < this.length; i++) {
-    this[i].style.display = display;
+  const elements = this;
+  const ani = this.animateOverTime;
 
-    const _fadeIn = (meaning) => {
-      this[i].style.opacity = meaning;
-    };
-
-    const ani = this.animateOverTime(dur, _fadeIn);
-    requestAnimationFrame(ani);
-  }
+  this.showBlocks(dur, display, elements, ani)();
 
   return this;
 };
 
 // Анимация добавления полченных элем
 $.prototype.fadeOut = function (dur) {
+  const elements = this;
+  const ani = this.animateOverTime;
+
+  this.hideBlocks(dur, elements, ani)();
+
+  return this;
+};
+
+// Анимация тогла полченных элем
+$.prototype.fadeToggle = function (dur, display = "block") {
+  const ani = this.animateOverTime;
+  let elementsHide = {};
+  let elementsShow = {};
+  let countH = 0;
+  let countS = 0;
+
   for (let i = 0; i < this.length; i++) {
-    const _fadeOut = (meaning) => {
-      this[i].style.opacity = 1 - meaning;
-
-      if (meaning === 1) {
-        this[i].style.display = "none";
+    if (window.getComputedStyle(this[i]).display === "block") {
+      elementsHide[i] = this[i];
+      elementsHide.length = ++countH;
+      if (i === this.length - 1) {
+        this.hideBlocks(dur, elementsHide, ani)();
       }
-    };
-
-    const ani = this.animateOverTime(dur, _fadeOut);
-    requestAnimationFrame(ani);
+    } else {
+      elementsShow[i] = this[i];
+      elementsShow.length = ++countS;
+      if (i === this.length - 1) {
+        this.showBlocks(dur, display, elementsShow, ani)();
+      }
+    }
   }
 
   return this;
