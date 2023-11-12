@@ -5,5 +5,6 @@ import "./modules/hadlers";
 import "./modules/attribut";
 import "./modules/actions";
 import "./modules/effects";
+import "./components/dropdown";
 
 export default $;

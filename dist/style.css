@@ -114,6 +114,28 @@
   width: 100%;
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  background-color: rgb(216, 216, 216);
+  border: 1px solid black;
+  min-width: 100%;
+}
+.dropdown-item {
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+.dropdown-item:hover {
+  background-color: rgb(170, 170, 170);
+}
+
 .text-center {
   text-align: center;
 }
