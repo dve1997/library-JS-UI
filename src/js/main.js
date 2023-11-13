@@ -1,20 +1,24 @@
 import "./lib/lib";
 
-$(".container").html(
-  `
-<div class="dropdown">
-        <button
-          class="btn btn-primary dropdow-toggle"
-          id="dpordown-menu-toggle"
-        >
-          Dropdown action
-        </button>
-        <div class="dropdown-menu" data-menu-toggle="dpordown-menu-toggle">
-          <a href="#" class="dropdown-item">action 1</a>
-          <a href="#" class="dropdown-item">action 2</a>
-          <a href="#" class="dropdown-item">action 3</a>
-        </div>
-      </div>`
-);
-
-$(".dropdow-toggle").dropdown();
+$("#trigger").on("click", () => {
+  $("#trigger").createModal({
+    text: {
+      title: "Modal title #2",
+      body: "Lorem ipsum dolor sit",
+    },
+    btns: {
+      count: 2,
+      settings: [
+        ["Close", ["btn-danger"], true],
+        [
+          "Save changes",
+          ["btn-success"],
+          false,
+          () => {
+            alert("Данные сохранены");
+          },
+        ],
+      ],
+    },
+  });
+});
