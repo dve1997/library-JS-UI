@@ -71,20 +71,21 @@ $.prototype.find = function (selector) {
 
 // Возращем объект состоящий из одного или некольких элем с заданным родительским селектором из изначально полученных элем
 $.prototype.closest = function (selector) {
-  let elementsLenght = this.length;
+  const lenghtElem = this.length;
 
   for (let i = 0; i < this.length; i++) {
-    if (this[i].closest(selector) == null) {
+    if (this[i].closest(selector)) {
+      this[0] = this[i].closest(selector);
+      this.length = 1;
+    } else {
       let error = new Error("Selector is not defined");
       console.error(error);
-
       return;
     }
-    this[i] = this[i].closest(selector);
   }
 
-  for (let k = this.length; k < elementsLenght; k++) {
-    delete this[k];
+  for (let j = this.length; j < lenghtElem; j++) {
+    delete this[j];
   }
 
   return this;
@@ -92,23 +93,31 @@ $.prototype.closest = function (selector) {
 
 // Возращаем все элем, кроме изначально переданного элем
 $.prototype.siblings = function () {
-  let lenghtNewObj = 0;
-  const element = Object.assign({}, this);
+  let numberOfItems = 0;
+  let counter = 0;
 
-  for (let i = 0; i < element.length; i++) {
-    let arr = element[i].parentNode.children;
+  const copyObj = Object.assign({}, this);
+
+  for (let i = 0; i < copyObj.length; i++) {
+    const arr = copyObj[i].parentNode.children;
 
     for (let j = 0; j < arr.length; j++) {
-      if (element[i] === arr[j]) {
+      if (copyObj[i] === arr[j]) {
         continue;
       }
-      this[j] = arr[j];
-      this.length = ++lenghtNewObj;
+
+      this[counter] = arr[j];
+      counter++;
     }
+
+    numberOfItems += arr.length - 1;
   }
 
-  for (let k = this.length; k < element.length; k++) {
-    delete this[k];
+  this.length = numberOfItems;
+
+  const objLength = Object.keys(this).length;
+  for (; numberOfItems < objLength; numberOfItems++) {
+    delete this[numberOfItems];
   }
 
   return this;

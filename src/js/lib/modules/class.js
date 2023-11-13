@@ -3,10 +3,6 @@ import $ from "../core";
 // Добавляем классы у полченных элем
 $.prototype.addClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
-    if (!this[i].classList) {
-      continue;
-    }
-
     this[i].classList.add(...className);
   }
 
@@ -16,10 +12,6 @@ $.prototype.addClass = function (...className) {
 // Удаляем классы у полченных элем
 $.prototype.removeClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
-    if (!this[i].classList) {
-      continue;
-    }
-
     this[i].classList.remove(...className);
   }
 
@@ -29,10 +21,6 @@ $.prototype.removeClass = function (...className) {
 // Тоглим класс у полченных элем
 $.prototype.toggleClass = function (className) {
   for (let i = 0; i < this.length; i++) {
-    if (!this[i].classList) {
-      continue;
-    }
-
     this[i].classList.toggle(className);
   }
 

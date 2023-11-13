@@ -144,6 +144,26 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createModal = function (
 
 /***/ }),
 
+/***/ "./src/js/lib/components/tabs.js":
+/*!***************************************!*\
+  !*** ./src/js/lib/components/tabs.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.tabs = function () {
+  for (let i = 0; i < this.length; i++) {
+    (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).on("click", e => {
+      (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).addClass("tab-item--active").siblings().removeClass("tab-item--active").closest(".tab").find(".tab-content").removeClass("tab-content--active").eq((0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).index()).addClass("tab-content--active");
+    });
+  }
+};
+(0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".tab-item").tabs();
+
+/***/ }),
+
 /***/ "./src/js/lib/core.js":
 /*!****************************!*\
   !*** ./src/js/lib/core.js ***!
@@ -195,6 +215,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_effects__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/effects */ "./src/js/lib/modules/effects.js");
 /* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/dropdown */ "./src/js/lib/components/dropdown.js");
 /* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/modal */ "./src/js/lib/components/modal.js");
+/* harmony import */ var _components_tabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/tabs */ "./src/js/lib/components/tabs.js");
+
 
 
 
@@ -280,37 +302,43 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.find = function (selecto
 
 // Возращем объект состоящий из одного или некольких элем с заданным родительским селектором из изначально полученных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.closest = function (selector) {
-  let elementsLenght = this.length;
+  const lenghtElem = this.length;
   for (let i = 0; i < this.length; i++) {
-    if (this[i].closest(selector) == null) {
+    if (this[i].closest(selector)) {
+      this[0] = this[i].closest(selector);
+      this.length = 1;
+    } else {
       let error = new Error("Selector is not defined");
       console.error(error);
       return;
     }
-    this[i] = this[i].closest(selector);
   }
-  for (let k = this.length; k < elementsLenght; k++) {
-    delete this[k];
+  for (let j = this.length; j < lenghtElem; j++) {
+    delete this[j];
   }
   return this;
 };
 
 // Возращаем все элем, кроме изначально переданного элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.siblings = function () {
-  let lenghtNewObj = 0;
-  const element = Object.assign({}, this);
-  for (let i = 0; i < element.length; i++) {
-    let arr = element[i].parentNode.children;
+  let numberOfItems = 0;
+  let counter = 0;
+  const copyObj = Object.assign({}, this);
+  for (let i = 0; i < copyObj.length; i++) {
+    const arr = copyObj[i].parentNode.children;
     for (let j = 0; j < arr.length; j++) {
-      if (element[i] === arr[j]) {
+      if (copyObj[i] === arr[j]) {
         continue;
       }
-      this[j] = arr[j];
-      this.length = ++lenghtNewObj;
+      this[counter] = arr[j];
+      counter++;
     }
+    numberOfItems += arr.length - 1;
   }
-  for (let k = this.length; k < element.length; k++) {
-    delete this[k];
+  this.length = numberOfItems;
+  const objLength = Object.keys(this).length;
+  for (; numberOfItems < objLength; numberOfItems++) {
+    delete this[numberOfItems];
   }
   return this;
 };
@@ -380,9 +408,6 @@ __webpack_require__.r(__webpack_exports__);
 // Добавляем классы у полченных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.addClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
-    if (!this[i].classList) {
-      continue;
-    }
     this[i].classList.add(...className);
   }
   return this;
@@ -391,9 +416,6 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.addClass = function (...
 // Удаляем классы у полченных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.removeClass = function (...className) {
   for (let i = 0; i < this.length; i++) {
-    if (!this[i].classList) {
-      continue;
-    }
     this[i].classList.remove(...className);
   }
   return this;
@@ -402,9 +424,6 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.removeClass = function (
 // Тоглим класс у полченных элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleClass = function (className) {
   for (let i = 0; i < this.length; i++) {
-    if (!this[i].classList) {
-      continue;
-    }
     this[i].classList.toggle(className);
   }
   return this;
@@ -662,20 +681,6 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
 
-$("#trigger").on("click", () => {
-  $("#trigger").createModal({
-    text: {
-      title: "Modal title #2",
-      body: "Lorem ipsum dolor sit"
-    },
-    btns: {
-      count: 2,
-      settings: [["Close", ["btn-danger"], true], ["Save changes", ["btn-success"], false, () => {
-        alert("Данные сохранены");
-      }]]
-    }
-  });
-});
 })();
 
 /******/ })()
