@@ -22,6 +22,70 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.accrodion = function () 
 
 /***/ }),
 
+/***/ "./src/js/lib/components/carousel.js":
+/*!*******************************************!*\
+  !*** ./src/js/lib/components/carousel.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.carousel = function () {
+  let index = 0;
+  for (let i = 0; i < this.length; i++) {
+    const carouselInnerWidth = getComputedStyle(this[i].querySelector(".carousel-inner")).width;
+    const carouselItem = this[i].querySelectorAll(".carousel-item");
+    const carouselSlides = this[i].querySelector(".carousel-slides");
+    const carouselIndicators = this[i].querySelectorAll(".carousel-indicators li");
+    let widthBias = +carouselInnerWidth.replace(/\D/g, "");
+    carouselItem.forEach(item => {
+      item.style.width = carouselInnerWidth;
+    });
+    carouselSlides.style.width = 100 * carouselItem.length + "%";
+    (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".carousel-next").on("click", e => {
+      e.preventDefault();
+      if (index == carouselItem.length - 1) {
+        index = 0;
+      } else {
+        index++;
+      }
+      carouselSlides.style.transform = `translateX(${-index * widthBias + "px"})`;
+      carouselIndicators.forEach(ind => {
+        ind.classList.remove("active");
+      });
+      carouselIndicators[index].classList.add("active");
+    });
+    (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".carousel-prev").on("click", e => {
+      e.preventDefault();
+      if (index == 0) {
+        index = 0;
+        index = carouselItem.length - 1;
+      } else {
+        index--;
+      }
+      carouselSlides.style.transform = `translateX(${-index * widthBias + "px"})`;
+      carouselIndicators.forEach(ind => {
+        ind.classList.remove("active");
+      });
+      carouselIndicators[index].classList.add("active");
+    });
+    carouselIndicators.forEach((ind, i) => {
+      ind.addEventListener("click", e => {
+        index = i;
+        carouselSlides.style.transform = `translateX(${-index * widthBias + "px"})`;
+        carouselIndicators.forEach(ind => {
+          ind.classList.remove("active");
+        });
+        carouselIndicators[index].classList.add("active");
+      });
+    });
+  }
+};
+(0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".carousel").carousel();
+
+/***/ }),
+
 /***/ "./src/js/lib/components/dropdown.js":
 /*!*******************************************!*\
   !*** ./src/js/lib/components/dropdown.js ***!
@@ -237,6 +301,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/modal */ "./src/js/lib/components/modal.js");
 /* harmony import */ var _components_tabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/tabs */ "./src/js/lib/components/tabs.js");
 /* harmony import */ var _components_accordion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/accordion */ "./src/js/lib/components/accordion.js");
+/* harmony import */ var _components_carousel__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/carousel */ "./src/js/lib/components/carousel.js");
+
 
 
 
