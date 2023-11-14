@@ -31,16 +31,17 @@ $.prototype.eq = function (i) {
 // Возращаем индекс полученного элем
 $.prototype.index = function () {
   const elem = this[0];
-  const parent = this[0].parentNode.children;
-  const parentLength = parent.length;
+  const childrenNode = this[0].parentNode.children;
+  const childrenElem = Object.values(childrenNode);
+  let pos = 0;
 
-  for (let i = 0; i < parentLength; i++) {
-    if (parent[i] == elem) {
-      return i;
-    } else {
-      continue;
+  childrenElem.forEach((item, i) => {
+    if (item == elem) {
+      pos = i;
     }
-  }
+  });
+
+  return pos;
 };
 
 // Возращем объект с заданным селектором из полученных элем

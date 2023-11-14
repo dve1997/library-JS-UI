@@ -2,6 +2,26 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/lib/components/accordion.js":
+/*!********************************************!*\
+  !*** ./src/js/lib/components/accordion.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.accrodion = function () {
+  for (let i = 0; i < this.length; i++) {
+    (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).on("click", e => {
+      (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).addClass("accordion-head--active").siblings().removeClass("accordion-head--active").closest(".accordion").find(".accordion-head, .accordion-content").removeClass("accordion-content--active").eq((0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).index())[0].nextElementSibling.classList.add("accordion-content--active");
+    });
+  }
+};
+(0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".accordion-head").accrodion();
+
+/***/ }),
+
 /***/ "./src/js/lib/components/dropdown.js":
 /*!*******************************************!*\
   !*** ./src/js/lib/components/dropdown.js ***!
@@ -216,6 +236,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/dropdown */ "./src/js/lib/components/dropdown.js");
 /* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/modal */ "./src/js/lib/components/modal.js");
 /* harmony import */ var _components_tabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/tabs */ "./src/js/lib/components/tabs.js");
+/* harmony import */ var _components_accordion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/accordion */ "./src/js/lib/components/accordion.js");
+
 
 
 
@@ -267,15 +289,15 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.eq = function (i) {
 // Возращаем индекс полученного элем
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.index = function () {
   const elem = this[0];
-  const parent = this[0].parentNode.children;
-  const parentLength = parent.length;
-  for (let i = 0; i < parentLength; i++) {
-    if (parent[i] == elem) {
-      return i;
-    } else {
-      continue;
+  const childrenNode = this[0].parentNode.children;
+  const childrenElem = Object.values(childrenNode);
+  let pos = 0;
+  childrenElem.forEach((item, i) => {
+    if (item == elem) {
+      pos = i;
     }
-  }
+  });
+  return pos;
 };
 
 // Возращем объект с заданным селектором из полученных элем
